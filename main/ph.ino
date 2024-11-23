@@ -16,10 +16,10 @@ void f_ph() {
 
   // PRINT EVERY 800 MS
   if (millis() - ph_print_time > PH_PRINT_INTERVAL) {
-    Serial.println(">>>---SENSOR---<<<");
+    Serial.println("------SENSOR");
     Serial.print("ph voltage: ");
     Serial.print(ph_voltage, 2);
-    Serial.print(" | ph value: ");
+    Serial.print("        | ph value: ");
     ph_value = ph_value - 0.58;  // TUNING MANUAL
     Serial.println(ph_value, 2);
     ph_print_time = millis();

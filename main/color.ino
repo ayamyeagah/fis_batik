@@ -25,6 +25,7 @@ void f_color() {
     Serial.print(color_green_freq);
     Serial.print(" B= ");
     Serial.print(color_blue_freq);
+    Serial.print("   ");
 
     classifyColor(color_red_freq, color_green_freq, color_blue_freq);
 

@@ -89,9 +89,12 @@ void loop() {
   f_color();
 
   // FUZZY INPUT
-  turbidity = turbidity_ntu;
-  ph = ph_value;
-  color = color;
+  // turbidity = turbidity_ntu;
+  // ph = ph_value;
+  // color = color;
+  turbidity = 100;
+  ph = 7.0;
+  color = 1;
 
   // FUZZY OUTPUT
   float output1, output2;
@@ -99,14 +102,17 @@ void loop() {
   // DEFUZZIFICATION
   deffuzification(&output1, &output2);
 
-  // LOGIC FOR ROUNDING AND TRIGGER PUMP & SOLENOID
+  // LOGIC FOR ROUNDING AND TRIGGER PUMP
   if (output1 > 0.5) {
     OUT_PUMP = true;
     INDICATOR_PUMP = "ON";
   } else if (output1 <= 0.5) {
     OUT_PUMP = false;
     INDICATOR_PUMP = "OFF";
-  } else if (output2 > 0.5) {
+  } 
+  
+  // LOGIC FOR ROUNDING AND TRIGGER SOLENOID
+  if (output2 > 0.5) {
     OUT_SOLENOID = true;
     INDICATOR_SOLENOID = "ON";
   } else if (output2 <= 0.5) {
@@ -141,7 +147,7 @@ void loop() {
   lcd.print(INDICATOR_SOLENOID);
 
   // PRINT MEMBERSHIP FUNCTION
-  Serial.println(">>>---MEMBERSHIP FUNCTION---<<<");
+  Serial.println("------MEMBERSHIP FUNCTION");
   Serial.print("asam: ");
   Serial.println(fuasam());
   Serial.print("netral: ");
@@ -156,11 +162,11 @@ void loop() {
   Serial.println(futidakkeruh());
 
   // PRINT FUZZY OUTPUT
-  Serial.println(">>>---FUZZY OUTPUT---<<<");
+  Serial.println("------FUZZY OUTPUT");
   Serial.print("pump: ");
   Serial.println(output1);
   Serial.print("solenoid: ");
   Serial.println(output2);
-  Serial.println("------------------------");
+  Serial.println("------------------");
   Serial.println();
 }

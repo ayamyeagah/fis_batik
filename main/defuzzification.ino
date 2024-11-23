@@ -8,7 +8,7 @@ void deffuzification(float *out1, float *out2) {
   X2 = 0;
   Y = 0;
 
-  for (int i = 1; 1 <= 18; i++) {
+  for (int i = 1; i <= 18; i++) {
     X1 += Rule[i][0] * minr[i];
     X2 += Rule[i][1] * minr[i];
     Y += minr[i];
