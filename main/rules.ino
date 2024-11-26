@@ -6,8 +6,8 @@
 void rule() {
   // r1
   minr[1] = Min(fuasam(), Min(futidakkeruh(), fucolored()));
-  Rule[1][0] = OFF;
-  Rule[1][1] = ON;
+  Rule[1][0] = OFF; // solenoid
+  Rule[1][1] = ON; // pompa
   // r2
   minr[2] = Min(fuasam(), Min(fukeruh(), fucolored()));
   Rule[2][0] = OFF;

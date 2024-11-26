@@ -10,15 +10,15 @@
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
-#define PH_PIN A0
-#define TURBIDITY_PIN A1
+#define PH_PIN A1
+#define TURBIDITY_PIN A0
 #define COLOR_S0 4
 #define COLOR_S1 5
 #define COLOR_S2 6
 #define COLOR_S3 7
 #define COLOR_OUT 8
-#define PUMP_PIN 9
-#define SOLENOID_PIN 10
+#define SOLENOID_PIN 9
+#define PUMP_PIN 10
 #define PH_SAMPLING_INTERVAL 20
 #define PH_PRINT_INTERVAL 800
 #define PH_ARRAY_LENGTH 40
@@ -28,8 +28,9 @@ int color_red_freq = 0;
 int color_green_freq = 0;
 int color_blue_freq = 0;
 
-int turbidity_value;
-float turbidity_voltage, turbidity_ntu;
+int read_sensor_turbidity, map_volt;
+float turbidity_voltage_raw, raw_volt;
+float turbidity_voltage_result, turbidity_ntu;
 
 int PH_ARRAY[PH_ARRAY_LENGTH];
 int PH_ARRAY_INDEX = 0;
@@ -89,12 +90,14 @@ void loop() {
   f_color();
 
   // FUZZY INPUT
-  // turbidity = turbidity_ntu;
-  // ph = ph_value;
-  // color = color;
-  turbidity = 100;
-  ph = 7.0;
-  color = 1;
+  turbidity = turbidity_ntu;
+  ph = ph_value;
+  color = color;
+
+  // DUMMY TEST FUZZY
+  // turbidity = 110;
+  // ph = 7;
+  // color = 0;
 
   // FUZZY OUTPUT
   float output1, output2;
@@ -102,20 +105,27 @@ void loop() {
   // DEFUZZIFICATION
   deffuzification(&output1, &output2);
 
-  // LOGIC FOR ROUNDING AND TRIGGER PUMP
-  if (output1 > 0.5) {
-    OUT_PUMP = true;
-    INDICATOR_PUMP = "ON";
-  } else if (output1 <= 0.5) {
-    OUT_PUMP = false;
-    INDICATOR_PUMP = "OFF";
-  } 
-  
   // LOGIC FOR ROUNDING AND TRIGGER SOLENOID
-  if (output2 > 0.5) {
+  if (output1 > 0.5) {
     OUT_SOLENOID = true;
     INDICATOR_SOLENOID = "ON";
-  } else if (output2 <= 0.5) {
+  } else if (output1 < 0.5) {
+    OUT_SOLENOID = false;
+    INDICATOR_SOLENOID = "OFF";
+  } 
+  
+  // LOGIC FOR ROUNDING AND TRIGGER PUMP
+  if (output2 > 0.5) {
+    OUT_PUMP = true;
+    INDICATOR_PUMP = "ON";
+  } else if (output2 < 0.5) {
+    OUT_PUMP = false;
+    INDICATOR_PUMP = "OFF";
+  }
+
+  if ((output1 == 0.5) && (output2 == 0.5)) {
+    OUT_PUMP = true;
+    INDICATOR_PUMP = "ON";
     OUT_SOLENOID = false;
     INDICATOR_SOLENOID = "OFF";
   }
@@ -123,28 +133,6 @@ void loop() {
   // RUN PUMP & SOLENOID
   digitalWrite(PUMP_PIN, OUT_PUMP);
   digitalWrite(SOLENOID_PIN, OUT_SOLENOID);
-
-  // LCD
-  lcd.setCursor(0, 0);  // line 1
-  lcd.print("pH: ");
-  lcd.setCursor(8, 0);
-  lcd.print(ph);
-  lcd.setCursor(0, 1);  // line 2
-  lcd.print("NTU: ");
-  lcd.setCursor(8, 1);
-  lcd.print(turbidity);
-  lcd.setCursor(0, 2);  // line 3
-  lcd.print("color: ");
-  lcd.setCursor(8, 2);
-  lcd.print(INDICATOR_COLOR);
-  lcd.setCursor(0, 3);  // line 4
-  lcd.print("PUMP: ");
-  lcd.setCursor(7, 3);
-  lcd.print(INDICATOR_PUMP);
-  lcd.setCursor(10, 3);  // line 4
-  lcd.print("SV: ");
-  lcd.setCursor(14, 3);
-  lcd.print(INDICATOR_SOLENOID);
 
   // PRINT MEMBERSHIP FUNCTION
   Serial.println("------MEMBERSHIP FUNCTION");
@@ -164,9 +152,31 @@ void loop() {
   // PRINT FUZZY OUTPUT
   Serial.println("------FUZZY OUTPUT");
   Serial.print("pump: ");
-  Serial.println(output1);
-  Serial.print("solenoid: ");
   Serial.println(output2);
+  Serial.print("solenoid: ");
+  Serial.println(output1);
   Serial.println("------------------");
   Serial.println();
+
+  // LCD
+  lcd.setCursor(0, 0);  // line 1
+  lcd.print("PH     : ");
+  lcd.setCursor(8, 0);
+  lcd.print(ph);
+  lcd.setCursor(0, 1);  // line 2
+  lcd.print("NTU    : ");
+  lcd.setCursor(8, 1);
+  lcd.print(turbidity);
+  lcd.setCursor(0, 2);  // line 3
+  lcd.print("COLOUR : ");
+  lcd.setCursor(8, 2);
+  lcd.print(INDICATOR_COLOR);
+  lcd.setCursor(0, 3);  // line 4
+  lcd.print("PUMP: ");
+  lcd.setCursor(6, 3);
+  lcd.print(INDICATOR_PUMP);
+  lcd.setCursor(10, 3);  // line 4
+  lcd.print("SV: ");
+  lcd.setCursor(14, 3);
+  lcd.print(INDICATOR_SOLENOID);
 }

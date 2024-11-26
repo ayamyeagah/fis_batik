@@ -9,7 +9,7 @@
 // logic ph
 float fuasam() {
   if (ph < uasam[0]) {
-    return 0;
+    return 1;
   } else if (ph >= uasam[0] && ph <= uasam[1]) {
     return (ph - uasam[0]) / (uasam[1] - uasam[0]);
   } else if (ph >= uasam[1] && ph <= uasam[2]) {
@@ -39,14 +39,14 @@ float fubasa() {
   } else if (ph >= ubasa[1] && ph <= ubasa[2]) {
     return (ubasa[2] - ph) / (ubasa[2] - ubasa[1]);
   } else if (ph > ubasa[2]) {
-    return 0;
+    return 1;
   }
 }
 
 // logic turbidity
 float futidakkeruh() {
   if (turbidity < utidakkeruh[0]) {
-    return 0;
+    return 1;
   } else if (turbidity >= utidakkeruh[0] && turbidity <= utidakkeruh[1]) {
     return (turbidity - utidakkeruh[0]) / (utidakkeruh[1] - utidakkeruh[0]);
   } else if (turbidity >= utidakkeruh[1] && turbidity <= utidakkeruh[2]) {
@@ -76,14 +76,14 @@ float fusangatkeruh() {
   } else if (turbidity >= usangatkeruh[1] && turbidity <= usangatkeruh[2]) {
     return (usangatkeruh[2] - turbidity) / (usangatkeruh[2] - usangatkeruh[1]);
   } else if (turbidity > usangatkeruh[2]) {
-    return 0;
+    return 1;
   }
 }
 
 // logic color
 float fucolorless() {
   if (color < ucolorless[0]) {
-    return 0;
+    return 1;
   } else if (color >= ucolorless[0] && color <= ucolorless[1]) {
     return (color - ucolorless[0]) / (ucolorless[1] - ucolorless[0]);
   } else if (color >= ucolorless[1] && color <= ucolorless[2]) {
@@ -101,6 +101,6 @@ float fucolored() {
   } else if (color >= ucolored[1] && color <= ucolored[2]) {
     return (ucolored[2] - color) / (ucolored[2] - ucolored[1]);
   } else if (color > ucolored[2]) {
-    return 0;
+    return 1;
   }
 }

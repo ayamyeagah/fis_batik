@@ -1,6 +1,6 @@
 void f_ph() {
   static unsigned long ph_sampling_time = millis();
-  static unsigned long ph_print_time = millis();
+  // static unsigned long ph_print_time = millis();
 
   // SAMPLING EVERY 20 MS
   if (millis() - ph_sampling_time > PH_SAMPLING_INTERVAL) {
@@ -14,16 +14,13 @@ void f_ph() {
     ph_sampling_time = millis();
   }
 
-  // PRINT EVERY 800 MS
-  if (millis() - ph_print_time > PH_PRINT_INTERVAL) {
-    Serial.println("------SENSOR");
-    Serial.print("ph voltage: ");
-    Serial.print(ph_voltage, 2);
-    Serial.print("        | ph value: ");
-    ph_value = ph_value - 0.58;  // TUNING MANUAL
-    Serial.println(ph_value, 2);
-    ph_print_time = millis();
-  }
+  ph_value = ph_value - 0.58;  // TUNING MANUAL
+
+  Serial.println("------SENSOR");
+  Serial.print("ph voltage: ");
+  Serial.print(ph_voltage, 2);
+  Serial.print("        | ph value: ");
+  Serial.println(ph_value, 2);
 }
 
 double ph_average_array(int* arr, int number) {
