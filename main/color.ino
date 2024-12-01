@@ -19,18 +19,18 @@ void f_color() {
     color_blue_freq = pulseIn(COLOR_OUT, LOW);
     color_blue_freq = map(color_blue_freq, 40, 170, 255, 0);
 
-    Serial.print("R= ");
-    Serial.print(color_red_freq);
-    Serial.print(" G= ");
-    Serial.print(color_green_freq);
-    Serial.print(" B= ");
-    Serial.print(color_blue_freq);
-    Serial.print("   ");
-
-    classifyColor(color_red_freq, color_green_freq, color_blue_freq);
-
     color_read_interval = millis();
   }
+
+  Serial.print("R= ");
+  Serial.print(color_red_freq);
+  Serial.print(" G= ");
+  Serial.print(color_green_freq);
+  Serial.print(" B= ");
+  Serial.print(color_blue_freq);
+  Serial.print("   ");
+
+  classifyColor(color_red_freq, color_green_freq, color_blue_freq);
 }
 
 void classifyColor(int r, int g, int b) {

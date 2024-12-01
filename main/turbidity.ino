@@ -20,10 +20,12 @@ void f_turbidity() {
     turbidity_ntu = -1120.4 * square(turbidity_voltage_result) + 5742.3 * turbidity_voltage_result - 4353.8;
   }
 
+  turbidity_ntu = turbidity_ntu / 100;
+  
   Serial.print("turbidity voltage: ");
   Serial.print(turbidity_voltage_result);
   Serial.print(" | ntu: ");
-  Serial.println(turbidity_ntu/100);
+  Serial.println(turbidity_ntu);
 }
 
 float round_to_dp(float in_value, int decimal_place) {
